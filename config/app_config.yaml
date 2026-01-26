@@ -1,0 +1,166 @@
+storage:
+  account_name: "${STORAGE_ACCOUNT_NAME}"
+  container_name: "payment-approvals"
+  mount_point: "/mnt/payment_data"
+  
+  paths:
+    bronze: "/mnt/payment_data/bronze"
+    silver: "/mnt/payment_data/silver"
+    gold: "/mnt/payment_data/gold"
+    checkpoints: "/mnt/payment_data/checkpoints"
+    ml_models: "/mnt/payment_data/ml_models"
+    feature_store: "/mnt/payment_data/feature_store"
+
+streaming:
+  trigger_interval: "5 seconds"
+  checkpoint_location: "/mnt/payment_data/checkpoints"
+  max_files_per_trigger: 1000
+  
+data_generation:
+  transactions_per_second: 100
+  num_cardholders: 100000
+  num_merchants: 5000
+  geographies: ["US", "UK", "EU", "LATAM", "APAC"]
+  
+payment_solutions:
+  - name: "3DS"
+    priority: 1
+    approval_rate_increase: 0.05
+    cost: 0.15
+  - name: "Antifraud"
+    priority: 2
+    approval_rate_increase: 0.08
+    cost: 0.10
+  - name: "IDPay"
+    priority: 3
+    approval_rate_increase: 0.12
+    cost: 0.20
+  - name: "DataShareOnly"
+    priority: 4
+    approval_rate_increase: 0.03
+    cost: 0.05
+  - name: "NetworkToken"
+    priority: 5
+    approval_rate_increase: 0.15
+    cost: 0.25
+  - name: "Passkey"
+    priority: 6
+    approval_rate_increase: 0.20
+    cost: 0.30
+
+ml_models:
+  smart_checkout:
+    algorithm: "xgboost"
+    features:
+      - transaction_amount
+      - merchant_category
+      - cardholder_geography
+      - issuer_bank
+      - time_of_day
+      - day_of_week
+      - historical_approval_rate
+      - fraud_score
+      - merchant_risk_score
+      - cardholder_risk_score
+    target: "optimal_payment_solution"
+    
+  fraud_detection:
+    algorithm: "lightgbm"
+    threshold: 0.85
+    features:
+      - transaction_amount
+      - merchant_country
+      - cardholder_country
+      - velocity_1h
+      - velocity_24h
+      - avg_transaction_amount
+      - transaction_hour
+      - moodys_risk_score
+    
+  retry_predictor:
+    algorithm: "xgboost"
+    features:
+      - time_since_decline
+      - decline_reason_code
+      - previous_retry_attempts
+      - issuer_bank
+      - transaction_amount
+      - day_of_month
+      - cardholder_balance_indicator
+    target: "retry_success_probability"
+
+reason_codes:
+  insufficient_funds: "51"
+  do_not_honor: "05"
+  invalid_transaction: "12"
+  lost_card: "41"
+  stolen_card: "43"
+  expired_card: "54"
+  incorrect_pin: "55"
+  transaction_not_permitted: "57"
+  suspected_fraud: "59"
+  exceeds_withdrawal_limit: "61"
+  restricted_card: "62"
+  security_violation: "63"
+  exceeds_frequency_limit: "65"
+
+dashboards:
+  approval_rate_dashboard:
+    refresh_interval: "5 minutes"
+    metrics:
+      - overall_approval_rate
+      - approval_rate_by_geography
+      - approval_rate_by_payment_solution
+      - approval_rate_by_merchant_category
+      - approval_rate_trend
+      
+  decline_analysis_dashboard:
+    refresh_interval: "5 minutes"
+    metrics:
+      - decline_rate
+      - decline_by_reason_code
+      - decline_by_issuer
+      - decline_by_time_of_day
+      - actionable_insights
+      
+  retry_performance_dashboard:
+    refresh_interval: "10 minutes"
+    metrics:
+      - retry_success_rate
+      - optimal_retry_timing
+      - retry_roi
+      - blocked_low_probability_retries
+
+external_data:
+  moodys:
+    enabled: true
+    api_endpoint: "https://api.moodys.com/v1"
+    risk_categories:
+      - fraud_risk
+      - aml_risk
+      - merchant_risk
+      - geographical_risk
+    refresh_interval: "1 hour"
+    
+monitoring:
+  metrics_interval: "30 seconds"
+  alert_thresholds:
+    approval_rate_drop: 0.05
+    fraud_rate_spike: 0.02
+    processing_latency_ms: 500
+    
+app:
+  host: "0.0.0.0"
+  port: 8080
+  debug: false
+  title: "Payment Approval Acceleration Dashboard"
+  
+agent:
+  name: "ApprovalOptimizerAgent"
+  model: "databricks-meta-llama-3-1-70b-instruct"
+  temperature: 0.7
+  max_tokens: 2000
+  system_prompt: |
+    You are an AI assistant specialized in optimizing payment approval rates.
+    You have access to real-time transaction data, decline patterns, and ML model predictions.
+    Provide actionable recommendations to improve approval rates while maintaining security.
