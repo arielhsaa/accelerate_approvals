@@ -1,8 +1,8 @@
 """
 External Data Generator for Payment Approval Demo
 
-Simulates external data sources like Moody's risk scores,
-AML checks, fraud intelligence, and merchant scoring.
+Simulates external data sources for fraud intelligence, 
+AML checks, and merchant scoring.
 """
 
 import random
@@ -29,92 +29,6 @@ class ExternalDataGenerator:
         self.faker = Faker()
         Faker.seed(seed)
         
-    def generate_moodys_risk_score(
-        self,
-        entity_id: str,
-        entity_type: str = "CARDHOLDER",
-        geography: str = "US"
-    ) -> Dict[str, Any]:
-        """
-        Generate Moody's-style risk score for an entity
-        
-        Args:
-            entity_id: Entity identifier (cardholder or merchant)
-            entity_type: Type of entity (CARDHOLDER, MERCHANT)
-            geography: Geographic region
-            
-        Returns:
-            Dictionary containing Moody's risk data
-        """
-        # Base risk score (0-100, lower is better)
-        if entity_type == "CARDHOLDER":
-            # Most cardholders have low risk
-            base_risk = np.random.beta(2, 8) * 100
-        else:  # MERCHANT
-            # Merchants have slightly higher risk variance
-            base_risk = np.random.beta(3, 7) * 100
-            
-        # Geography risk adjustment
-        geography_risk = {
-            "US": 0,
-            "UK": 2,
-            "EU": 1,
-            "LATAM": 8,
-            "APAC": 5
-        }.get(geography, 5)
-        
-        risk_score = round(min(100, base_risk + geography_risk + random.uniform(-5, 5)), 2)
-        
-        # Risk rating based on score
-        if risk_score < 20:
-            risk_rating = "AAA"
-        elif risk_score < 35:
-            risk_rating = "AA"
-        elif risk_score < 50:
-            risk_rating = "A"
-        elif risk_score < 65:
-            risk_rating = "BBB"
-        elif risk_score < 80:
-            risk_rating = "BB"
-        elif risk_score < 90:
-            risk_rating = "B"
-        else:
-            risk_rating = "C"
-            
-        # Component scores
-        fraud_risk = round(risk_score * random.uniform(0.8, 1.2), 2)
-        aml_risk = round(risk_score * random.uniform(0.7, 1.3), 2)
-        credit_risk = round(risk_score * random.uniform(0.9, 1.1), 2)
-        operational_risk = round(risk_score * random.uniform(0.85, 1.15), 2)
-        
-        # Normalize component scores to 0-100
-        fraud_risk = min(100, max(0, fraud_risk))
-        aml_risk = min(100, max(0, aml_risk))
-        credit_risk = min(100, max(0, credit_risk))
-        operational_risk = min(100, max(0, operational_risk))
-        
-        # Risk indicators
-        pep_flag = random.random() < 0.02  # Politically Exposed Person (rare)
-        sanctions_flag = random.random() < 0.01  # Sanctions list (very rare)
-        adverse_media = random.random() < 0.05  # Adverse media mentions
-        
-        return {
-            "entity_id": entity_id,
-            "entity_type": entity_type,
-            "risk_score": risk_score,
-            "risk_rating": risk_rating,
-            "fraud_risk_score": fraud_risk,
-            "aml_risk_score": aml_risk,
-            "credit_risk_score": credit_risk,
-            "operational_risk_score": operational_risk,
-            "geography": geography,
-            "pep_flag": pep_flag,
-            "sanctions_flag": sanctions_flag,
-            "adverse_media_flag": adverse_media,
-            "last_updated": datetime.now().isoformat(),
-            "data_source": "Moodys Analytics"
-        }
-    
     def generate_fraud_intelligence(
         self,
         transaction_id: str,
@@ -393,17 +307,6 @@ def main():
     generator = ExternalDataGenerator()
     
     # Generate sample data
-    print("Generating Moody's risk scores...")
-    cardholder_risk = generator.generate_moodys_risk_score("CH000001", "CARDHOLDER", "US")
-    merchant_risk = generator.generate_moodys_risk_score("MER000001", "MERCHANT", "UK")
-    
-    print("\nCardholder Risk Score:")
-    print(pd.Series(cardholder_risk))
-    
-    print("\nMerchant Risk Score:")
-    print(pd.Series(merchant_risk))
-    
-    print("\n" + "="*50)
     print("Generating fraud intelligence...")
     fraud_intel = generator.generate_fraud_intelligence(
         "TXN001", "CH000001", "MER000001", 150.00, "US"

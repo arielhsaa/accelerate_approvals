@@ -85,7 +85,7 @@ Data Sources → Streaming Ingestion → Delta Lake → ML Models → Consumptio
 
 ### Data Layer
 - **Bronze**: Raw transaction, cardholder, merchant data
-- **Silver**: Enriched with external data (Moody's risk scores)
+- **Silver**: Enriched with fraud intelligence and AML screening
 - **Gold**: Aggregated metrics and insights
 
 ### ML Layer

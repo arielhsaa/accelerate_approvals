@@ -29,7 +29,7 @@ This guide provides a walkthrough for demonstrating the Payment Approval Acceler
 - **Medallion Architecture**: Bronze (raw) → Silver (enriched) → Gold (analytics)
 - **Real-time Processing**: Spark Structured Streaming
 - **ML Models**: XGBoost, LightGBM for decisioning
-- **External Data**: Moody's risk scores, fraud intelligence
+- **External Data**: Fraud intelligence, AML screening
 - **Consumption**: Dashboards, Apps, Agents, Genie
 
 **Demo Script:**
@@ -52,7 +52,7 @@ This guide provides a walkthrough for demonstrating the Payment Approval Acceler
 4. Show processing latency metrics
 
 **Demo Script:**
-> "Here we're processing transactions in real-time. Each transaction is enriched with cardholder profile, merchant data, and external risk scores from Moody's. Our Smart Checkout engine recommends optimal payment solutions - like 3DS, Network Tokens, or IDPay - all within milliseconds. Notice the processing time is under 100ms even with ML inference."
+> "Here we're processing transactions in real-time. Each transaction is enriched with cardholder profile, merchant data, and external fraud intelligence. Our Smart Checkout engine recommends optimal payment solutions - like 3DS, Network Tokens, or IDPay - all within milliseconds. Notice the processing time is under 100ms even with ML inference."
 
 ### 4. Smart Checkout ML Models (8 minutes)
 

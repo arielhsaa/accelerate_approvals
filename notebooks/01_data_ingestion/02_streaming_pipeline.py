@@ -147,15 +147,14 @@ def predict_approval_probability(
 def calculate_composite_risk_score(
     fraud_score: float,
     cardholder_risk_score: float,
-    merchant_risk_score: float,
-    moodys_risk_score: float
+    merchant_risk_score: float
 ) -> float:
     """
     Calculate composite risk score from multiple sources
     """
     # Weighted average
-    weights = [0.40, 0.25, 0.20, 0.15]  # fraud, cardholder, merchant, moodys
-    scores = [fraud_score, cardholder_risk_score, merchant_risk_score, moodys_risk_score]
+    weights = [0.50, 0.30, 0.20]  # fraud, cardholder, merchant
+    scores = [fraud_score, cardholder_risk_score, merchant_risk_score]
     
     composite = sum(w * s for w, s in zip(weights, scores))
     return round(composite, 2)
@@ -243,54 +242,12 @@ print("✓ Merchant enrichment configured")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Generate External Data (Moody's Risk Scores)
-
-# COMMAND ----------
-
-# Simulate Moody's risk score lookup
-@udf(returnType=DoubleType())
-def get_moodys_risk_score(cardholder_id: str, merchant_id: str, geography: str) -> float:
-    """
-    Simulate Moody's risk score API call
-    In production, this would be an actual API call or cached lookup
-    """
-    import random
-    import hashlib
-    
-    # Use hash for deterministic "random" scores
-    seed = int(hashlib.md5(f"{cardholder_id}{merchant_id}".encode()).hexdigest(), 16) % 100
-    random.seed(seed)
-    
-    base_score = random.uniform(10, 50)
-    
-    # Geography adjustment
-    geo_adjustment = {
-        "US": 0,
-        "UK": 2,
-        "EU": 1,
-        "LATAM": 8,
-        "APAC": 5
-    }.get(geography, 5)
-    
-    return round(base_score + geo_adjustment, 2)
-
-# Add Moody's risk score
-enriched_with_external = (enriched_with_merchant
-    .withColumn("moodys_risk_score", 
-                get_moodys_risk_score(col("cardholder_id"), col("merchant_id"), col("geography")))
-)
-
-print("✓ External data enrichment configured")
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ## Apply Smart Checkout Decisioning
 
 # COMMAND ----------
 
 # Apply smart checkout logic
-with_smart_checkout = (enriched_with_external
+with_smart_checkout = (enriched_with_merchant
     .withColumn("recommended_solutions",
                 smart_checkout_decision(
                     col("amount"),
@@ -305,8 +262,7 @@ with_smart_checkout = (enriched_with_external
                 calculate_composite_risk_score(
                     col("fraud_score"),
                     col("cardholder_risk_score"),
-                    col("merchant_risk_score"),
-                    col("moodys_risk_score")
+                    col("merchant_risk_score")
                 ))
     .withColumn("predicted_approval_probability",
                 predict_approval_probability(

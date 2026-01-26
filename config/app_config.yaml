@@ -75,7 +75,6 @@ ml_models:
       - velocity_24h
       - avg_transaction_amount
       - transaction_hour
-      - moodys_risk_score
     
   retry_predictor:
     algorithm: "xgboost"
@@ -131,17 +130,6 @@ dashboards:
       - retry_roi
       - blocked_low_probability_retries
 
-external_data:
-  moodys:
-    enabled: true
-    api_endpoint: "https://api.moodys.com/v1"
-    risk_categories:
-      - fraud_risk
-      - aml_risk
-      - merchant_risk
-      - geographical_risk
-    refresh_interval: "1 hour"
-    
 monitoring:
   metrics_interval: "30 seconds"
   alert_thresholds:

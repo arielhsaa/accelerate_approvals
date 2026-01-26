@@ -30,8 +30,8 @@ Optimize recurring transaction retries by learning the optimal timing and condit
 │                    Data Sources Layer                        │
 ├─────────────────────────────────────────────────────────────┤
 │ • Transaction Stream    • Cardholder Data                    │
-│ • Merchant Data         • Moody's Risk Data                  │
-│ • Network Token Events  • Fraud Signals                      │
+│ • Merchant Data         • Fraud Signals                      │
+│ • Network Token Events  • AML Screening                      │
 └──────────────────┬──────────────────────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────────────────────┐
@@ -176,7 +176,6 @@ The demo tracks and visualizes:
 export DATABRICKS_HOST="https://<workspace>.azuredatabricks.net"
 export DATABRICKS_TOKEN="<your-token>"
 export STORAGE_ACCOUNT="<storage-account-name>"
-export MOODYS_API_KEY="<api-key>"
 ```
 
 ### Cluster Configuration

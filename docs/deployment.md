@@ -31,9 +31,6 @@ DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/<warehouse-id>
 STORAGE_ACCOUNT_NAME=<your-storage-account>
 STORAGE_ACCOUNT_KEY=<your-storage-key>
 STORAGE_CONTAINER=payment-approvals
-
-# Optional: External Data Sources
-MOODYS_API_KEY=<your-api-key>
 ```
 
 ## Step 3: Create Databricks Cluster
@@ -343,7 +340,7 @@ spark.createDataFrame(transactions).write.format("delta").mode("append").save("/
 1. **Customize Configuration**: Edit `config/app_config.yaml` for your use case
 2. **Tune ML Models**: Adjust hyperparameters in training notebooks
 3. **Create Custom Dashboards**: Build dashboards specific to your KPIs
-4. **Integrate External Data**: Connect real Moody's or other data sources
+4. **Integrate External Data**: Connect real fraud intelligence or AML data sources
 5. **Setup CI/CD**: Automate deployment with Azure DevOps or GitHub Actions
 
 ## Support

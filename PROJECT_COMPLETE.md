@@ -21,7 +21,7 @@ A **comprehensive, production-ready Azure Databricks demo** showcasing how to ac
 - Transaction generator (realistic patterns)
 - Cardholder profiles (100K records)
 - Merchant data (5K records)
-- External data simulation (Moody's risk scores)
+- External fraud intelligence and AML screening
 
 ✅ **Silver Layer**: Enriched data
 - Real-time streaming with Spark Structured Streaming
@@ -131,7 +131,7 @@ A **comprehensive, production-ready Azure Databricks demo** showcasing how to ac
    - transaction_generator.py (realistic transaction patterns)
    - cardholder_generator.py (100K profiles with risk scores)
    - merchant_generator.py (5K merchants with categories)
-   - external_data_generator.py (Moody's simulation)
+   - external_data_generator.py (fraud intelligence, AML screening)
 
 ✅ notebooks/
    - 01_data_ingestion/
@@ -217,7 +217,7 @@ A **comprehensive, production-ready Azure Databricks demo** showcasing how to ac
 ## 💡 Key Innovations
 
 1. **Smart Checkout Engine**: Dynamic payment solution selection based on ML predictions
-2. **Composite Risk Scoring**: Multi-source risk aggregation (fraud, cardholder, merchant, Moody's)
+2. **Composite Risk Scoring**: Multi-source risk aggregation (fraud, cardholder, merchant)
 3. **Intelligent Retry Logic**: ML-powered optimal timing prediction
 4. **Root Cause Automation**: Automated decline categorization and recommendations
 5. **Conversational Analytics**: AI agent for natural language insights
@@ -281,7 +281,7 @@ python scripts/verify_deployment.py
 ## 🎁 Bonus Features
 
 - **Synthetic Data**: Realistic patterns without real PII
-- **External Data Simulation**: Moody's risk scores
+- **External Data Simulation**: Fraud intelligence and AML screening
 - **Multi-Geography Support**: US, UK, EU, LATAM, APAC
 - **Multiple Payment Solutions**: 6 different options
 - **Comprehensive Metrics**: 50+ KPIs tracked

@@ -65,7 +65,7 @@ echo ""
 
 # Step 2: Upload notebooks
 echo "Step 2: Uploading notebooks..."
-databricks workspace import_dir \
+databricks workspace import-dir \
   notebooks \
   "$WORKSPACE_FOLDER/notebooks" \
   --overwrite

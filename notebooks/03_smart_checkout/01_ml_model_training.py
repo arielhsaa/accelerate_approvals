@@ -99,7 +99,6 @@ features_df = (training_data
         col("fraud_score"),
         col("cardholder_risk_score"),
         col("merchant_risk_score"),
-        col("moodys_risk_score"),
         col("composite_risk_score"),
         
         # Cardholder features
@@ -153,7 +152,7 @@ categorical_features = [
 numerical_features = [
     'amount', 'hour_of_day', 'day_of_week', 'day_of_month',
     'fraud_score', 'cardholder_risk_score', 'merchant_risk_score',
-    'moodys_risk_score', 'composite_risk_score', 'account_age_months',
+    'composite_risk_score', 'account_age_months',
     'cardholder_approval_rate', 'merchant_approval_rate', 'merchant_fraud_rate',
     'processing_time_ms'
 ]
