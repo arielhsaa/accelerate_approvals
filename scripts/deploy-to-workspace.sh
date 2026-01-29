@@ -128,10 +128,15 @@ echo ""
 
 # Step 6: Install libraries
 echo "Step 6: Installing libraries..."
-databricks libraries install --cluster-id $CLUSTER_ID --pypi-package faker==22.0.0
-databricks libraries install --cluster-id $CLUSTER_ID --pypi-package xgboost==2.0.0
-databricks libraries install --cluster-id $CLUSTER_ID --pypi-package lightgbm==4.1.0
-databricks libraries install --cluster-id $CLUSTER_ID --pypi-package plotly==5.18.0
+databricks libraries install --json "{
+  \"cluster_id\": \"$CLUSTER_ID\",
+  \"libraries\": [
+    {\"pypi\": {\"package\": \"faker==22.0.0\"}},
+    {\"pypi\": {\"package\": \"xgboost==2.0.0\"}},
+    {\"pypi\": {\"package\": \"lightgbm==4.1.0\"}},
+    {\"pypi\": {\"package\": \"plotly==5.18.0\"}}
+  ]
+}"
 echo -e "${GREEN}✓ Libraries installation initiated${NC}"
 echo ""
 
